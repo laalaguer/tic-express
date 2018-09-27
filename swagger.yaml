@@ -1,0 +1,188 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "TIC Express"
+  termsOfService: ""
+  contact:
+    email: "laalaguer@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+tags:
+- name: "root"
+  description: "节点根账户操作相关"
+  
+schemes:
+- "https"
+- "http"
+paths:
+  /root/status:
+    get:
+      tags:
+        - "root"
+      summary: "查看本节点余额"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/AccountResponse'
+        400:
+          description: 'account not installed'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /root/suspend:
+    get:
+      tags:
+        - "root"
+      summary: "暂停 TIC 传输功能"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "操作成功"
+          schema:
+            $ref: '#/definitions/SimpleResponse'
+        400:
+          description: '操作失败'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /root/resume:
+    get:
+      tags:
+        - "root"
+      summary: "恢复 TIC 传输功能"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "操作成功"
+          schema:
+            $ref: '#/definitions/SimpleResponse'
+        400:
+          description: '操作失败'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /root/destroy:
+    get:
+      tags:
+        - "root"
+      summary: "摧毁节点搭载的根账户(无法撤销，慎用)"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "操作成功"
+          schema:
+            $ref: '#/definitions/SimpleResponse'
+        400:
+          description: '操作失败'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /account/{address}:
+    get:
+      tags:
+        - "root"
+      summary: "查看任意目标地址的余额情况"
+      parameters:
+      - name: "address"
+        in: "path"
+        description: "试图查看的目标区块链地址"
+        required: true
+        type: "string"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "操作成功"
+          schema:
+            $ref: '#/definitions/AccountResponse'
+        400:
+          description: '操作失败'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /tic/send:
+    post:
+      tags:
+        - "root"
+      summary: "朝目标地址发送 TIC 币"
+      consumes:
+      - "application/json"
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              address:
+                type: string
+                example: "0x083b700e7c0d5c8878ee1d29957ef795411f744d"
+              amount:
+                type: number
+                example: 100
+        
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "操作成功"
+          schema:
+            $ref: '#/definitions/TransactionResponse'
+        400:
+          description: '操作失败'
+          schema:
+            $ref: '#/definitions/ErrorResponse' 
+
+definitions:
+  AccountStatus:
+    type: "object"
+    required:
+    - "vet"
+    - "vtho"
+    - "tic"
+    properties:
+      vet:
+        type: "integer"
+        format: "int64"
+      vtho:
+        type: "integer"
+        format: "int64"
+      tic:
+        type: "integer"
+        format: "int64"
+  
+  TransactionStatus:
+    type: "object"
+    properties:
+      TxHash:
+        type: "string"
+        example: "0xac19dfcb9ecca0967f3c45261d6972dd8e599928c4800868a5e7279243483297"
+  
+  TransactionResponse:
+    type: "object"
+    properties:
+      result:
+        $ref: "#/definitions/TransactionStatus"
+
+  AccountResponse:
+    type: "object"
+    properties:
+      result:
+        $ref: "#/definitions/AccountStatus"
+
+  SimpleResponse:
+    type: "object"
+    properties:
+      result:
+        type: "boolean"
+        example: true
+
+  ErrorResponse:
+    type: "object"
+    properties:
+      error:
+        type: "string"
+  
