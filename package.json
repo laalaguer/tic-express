@@ -1,0 +1,28 @@
+{
+  "name": "tic-express",
+  "version": "1.0.0",
+  "description": "Express application to send tic as a tool.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "laalaguer@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.3",
+    "joi": "^13.6.0",
+    "keccak": "^1.4.0",
+    "secp256k1": "^3.5.2",
+    "thorify": "^1.0.2",
+    "web3": "^1.0.0-beta.36"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}

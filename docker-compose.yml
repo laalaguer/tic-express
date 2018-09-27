@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  thor-node:
+    image: vechain/thor
+    volumes:
+      - ${HOST_FOLDER}:/root/.org.vechain.thor
+    ports:
+      - "11235:11235/udp"
+    command: ["--api-addr","0.0.0.0:${API_PORT}", "--network", "${NETWORK_TYPE}"]
+  
+  tic-express:
+    image: laalaguer/tic-express:latest
+    environment:
+      PORT: ${HTTP_PORT}
+      ENDPOINT: "http://thor-node:${API_PORT}"
+      CONTRACT: "${CONTRACT_ADDRESS}"
+      PRIV: "${PRIVATE_KEY}"
+    ports:
+      - "${HTTP_PORT}:${HTTP_PORT}"
